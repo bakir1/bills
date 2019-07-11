@@ -1,0 +1,14 @@
+<h1>Reports</h1>
+<h1 id="paid">PAID: </h1>
+<h1 id="unpaid">UNPAID: </h1>
+
+<script>
+    const getReports = function () {
+        $.get("rest/v1/count", function (data) {
+            $("#paid").text("PAID: " + data.paid);
+            $("#unpaid").text("UNPAID: " + data.unpaid);
+        });
+    };
+
+    getReports()
+</script>

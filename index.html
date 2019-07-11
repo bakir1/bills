@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>HTML5</title>
+  <meta charset="utf-8">
+
+  <link rel="stylesheet" href="assets/css/spapp.css" />
+  <link rel="stylesheet" href="assets/css/custom.css" />
+  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" />
+
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js">
+    </script>
+    <![endif]-->
+</head>
+
+<body>
+
+  <nav role="navigation">
+    <ul>
+      <li><a href="#reports">Reports</a></li>
+      <li><a href="#bills">Bills</a></li>
+      <li><a href="#login">Login</a></li>
+    </ul>
+  </nav>
+
+  <main id="spapp" role="main">
+    <section id="login" data-load="login.html"></section>
+    <section id="reports" data-load="reports.html"></section>
+    <section id="bills" data-load="bills.html"></section>
+    <section id="error_404">
+      <h1>Page not found</h1>
+    </section>
+  </main>
+
+  <script src="https://code.jquery.com/jquery-3.1.0.min.js"
+    integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+  <script src="assets/js/jquery.spapp.js"></script>
+  <script src="assets/js/custom.js"></script>
+  <script src="assets/jquery/jquery.validate.min.js"></script>
+
+  
+  <!-- Bootstrap core JavaScript-->
+  <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

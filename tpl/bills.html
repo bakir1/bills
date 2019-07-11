@@ -1,0 +1,158 @@
+<div class="modal fade" id="addBillModal" tabindex="-1" role="dialog" aria-labelledby="addBillModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addBillModalLabel">Add new bill</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <!-- are: id,
+                    type, date and time, total amount and status. -->
+                <form id="createBillForm" action="#">
+                    <div class="form-group">
+                        <label for="billType">Type</label>
+                        <input required minlength="2" class="form-control" type="text" name="type" id="billType"
+                            placeholder="Electricity" />
+                    </div>
+                    <div class="form-group">
+                        <label for="billDate">Date & time</label>
+                        <input required class="form-control" type="datetime-local" name="date" id="billDate"
+                            placeholder="19/06/2019, 03:25" />
+                    </div>
+                    <div class="form-group">
+                        <label for="billAmount">Amount</label>
+                        <input required class="form-control" type="number" name="amount" id="billAmount"
+                            placeholder="199.99" />
+                    </div>
+                    <div class="form-group">
+                        <label for="billStatus">Status</label>
+                        <select class="form-control" id="billStatus" name="status">
+                            <option value="Paid">Paid</option>
+                            <option value="Unpaid">Unpaid</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <h1>Bills</h1>
+    <div class="row">
+        <div class="col-2">
+            <button class="btn btn-success" type="button" data-toggle="modal" data-target="#addBillModal">
+                Add New
+            </button>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-12">
+            <table class="table" id="bills_table">
+                <thead>
+                    <tr>
+                        <th>#ID</th>
+                        <th>Type</th>
+                        <th>Date & Time</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $("#createBillForm").validate({
+            rules: {
+                type: {
+                    minlength: 3,
+                    required: true,
+                },
+                date: {
+                    required: true,
+                },
+                amount: {
+                    required: true,
+                },
+                status: {
+                    required: true
+                }
+            },
+            messages: {
+                type: {
+                    required: "Please enter type",
+                    minlength: "Enter 3 characters at least"
+                },
+                date: {
+                    required: "Please enter date",
+                },
+                amount: {
+                    required: "Please enter amount",
+                },
+                status: {
+                    required: "Please enter status",
+                }
+            },
+            submitHandler: function (form) {
+                $.ajax({
+                    type: "POST",
+                    url: "rest/v1/bills",
+                    data: $('#createBillForm').serialize(),
+                    success: function () {
+                        getBills();
+                        $("#addBillModal").modal("toggle");
+                        form.find("input").val("");
+                    }
+                });
+            }
+        });
+
+        getBills();
+    })
+
+
+    const getBills = function () {
+        $.get("rest/v1/bills", function (data) {
+            reloadTable(data);
+        });
+    };
+
+
+    const reloadTable = function (bills) {
+        var table = $("#bills_table");
+        table.find("tbody tr").remove();
+        bills.forEach(function (bill) {
+            table.append(
+                `<tr><td> ${bill.id} </td><td> ${bill.type} </td><td> ${
+                bill.date
+                } </td><td> ${bill.amount} </td><td> ${
+                bill.status
+                } </td><td style="max-width:200px">${actionButtons(bill.id)}</td></tr>`
+            );
+        });
+    };
+
+    const actionButtons = function (id) {
+        return `<button class="btn btn-danger mr-3 float-right" onclick="del(${id})">Delete</button>`;
+    };
+
+    const del = function (id) {
+        $.ajax({
+            type: "DELETE",
+            url: "rest/v1/bills/" + id,
+            success: function () {
+                getBills();
+            }
+        });
+    };
+
+</script>
